@@ -1,4 +1,4 @@
-Cognitive Human Robot Interaction.
+**Cognitive Human Robot Interaction.**
 
 Formulate a robot model that can adjust its behavior to interact and collaborate effectively with a
 human whose own behavior and performance are subject to unpredictable changes like mood swings,
