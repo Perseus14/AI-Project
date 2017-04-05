@@ -14,9 +14,17 @@ from matplotlib.pylab import rcParams
 rcParams['figure.figsize'] = 15, 6
 from statsmodels.tsa.arima_model import ARIMA
 
+#For Plotting
+import matplotlib.pyplot as plt
 
 
+def get_sec(time_str):
+	h, m, s = time_str.split(':')
+	return int(h) * 3600 + int(m) * 60 + int(s)
 
+
+plt.ion()
+#plt.axis([0,20],[])
 # construct the argument parser and parse the arguments
 ap = argparse.ArgumentParser()
 ap.add_argument("-v", "--video", help="hand.mp4")
@@ -50,7 +58,7 @@ timeparse = lambda dates: pd.datetime.strptime(dates, '%H:%M')
 data = pd.read_csv('data.csv', parse_dates=[0],date_parser=timeparse)
 pre_time = datetime.datetime.now()
 i = -1
-
+curr_time = datetime.datetime.now()
 while True:
 	# grab the current frame and initialize the occupied/unoccupied
 	# text
@@ -122,10 +130,13 @@ while True:
        				predictions_ARIMA_log.head()
         			predictions_ARIMA = np.exp(predictions_ARIMA_log)
 				pred_time = time + timedelta(seconds = predictions_ARIMA[-1])
+				pred_time1 = predictions_ARIMA[-1]
         			print "predicted", pred_time
-
-
-
+				print pred_time1,act_time.total_seconds()
+				plt.scatter(i,pred_time1,color='red')
+				if(i>0):	
+					plt.scatter(i-1,(act_time.total_seconds()),color='blue')
+				plt.pause(1)
 	if(cnts==[]):
 		lastframe=currframe
 		currframe=0
@@ -148,8 +159,10 @@ while True:
 		# and update the text
 		(x, y, w, h) = cv2.boundingRect(c)
 		cv2.rectangle(frame, (x, y), (x + w, y + h), (0, 255, 0), 2)
-		text = "Human Waiting"
+		text = "Human Waiting" 
 		if(lasttext!=text):
+			act_time = (datetime.datetime.now() - curr_time)
+			curr_time = datetime.datetime.now()
 			print datetime.datetime.now().strftime("%A %d %B %Y %I:%M:%S%p")
 		lasttext=text
 		lastframe=currframe
@@ -172,5 +185,6 @@ while True:
 		break
  	
 # cleanup the camera and close any open windows
+plt.savefig("act_pred_plot.jpg")
 camera.release()
 cv2.destroyAllWindows()
