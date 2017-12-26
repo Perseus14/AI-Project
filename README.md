@@ -37,10 +37,11 @@ Once you execute the above command
 
 
 MULTIPLE HUMAN SCHEDULING SIMULATION:
+
 python3 sim_multi_rand_FCFS.py 
 python3 sim_multi_rand_SJF.py
 
-These command generate the graph os jobs done vs time for each of the human using the scheduling policy.
+These command generate the graph of "jobs done" vs "time" for each of the human using the scheduling policy.
 
 
 
